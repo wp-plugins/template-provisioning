@@ -24,8 +24,10 @@ Will this plugin work with your theme? Probably. It's completely additive, and d
 
 == Installation ==
 
-1. Download and unzip the plugin files (bigbig_template_provisioning.zip)
-2. Move the 'bigbig_template_provisioning' folder into your '/wp-content/plugins/' directory.
+= Installation =
+
+1. Download and unzip the plugin files (bigbig\_template\_provisioning.zip)
+2. Move the 'bigbig\_template\_provisioning' folder into your '/wp-content/plugins/' directory.
 3. Activate the plugin through the Wordpress Admin 'Plugins' page.
 4. Modify your theme, per the usage instructions below.
 
@@ -33,25 +35,25 @@ Will this plugin work with your theme? Probably. It's completely additive, and d
 
 Using the plugin is easy.  Just create some .css and .js files where the plugin expects them... in the same directory as your template files.  There are a series of files that it looks for when rendering a page using any given template file:
 
-Stylesheets for "&lt;template_name&gt;.php":
-included in page &lt;head&gt; by wp_head() function
+Stylesheets for "&lt;template\_name&gt;.php":
+included in page &lt;head&gt; by wp\_head() function
 
 * css/global.css
 * css/ie/global.css
-* css/&lt;template_name&gt;.css
-* css/ie/&lt;template_name&gt;.css
+* css/&lt;template\_name&gt;.css
+* css/ie/&lt;template\_name&gt;.css
 
-Javascript files for "&lt;template_name&gt;.php":
-included in page &lt;head&gt; by wp_head() function
+Javascript files for "&lt;template\_name&gt;.php":
+included in page &lt;head&gt; by wp\_head() function
 
 * js/global.js
-* js/&lt;template_name&gt;.js
+* js/&lt;template\_name&gt;.js
 
-End-of-page Javascript files for "&lt;template_name&gt;.php" footer:
-included near the &lt;/body&gt; tag by wp_footer() function
+End-of-page Javascript files for "&lt;template\_name&gt;.php" footer:
+included near the &lt;/body&gt; tag by wp\_footer() function
 
-* js/global_footer.js
-* js/&lt;template_name&gt;_footer.js
+* js/global\_footer.js
+* js/&lt;template\_name&gt;\_footer.js
 
 == Frequently Asked Questions ==
 
