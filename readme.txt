@@ -26,8 +26,8 @@ Will this plugin work with your theme? Probably. It's completely additive, and d
 
 = Installation =
 
-1. Download and unzip the plugin files (bigbig\_template\_provisioning.zip)
-2. Move the 'bigbig\_template\_provisioning' folder into your '/wp-content/plugins/' directory.
+1. Download and unzip the plugin files (bigbig-template-provisioning.zip)
+2. Move the 'bigbig-template-provisioning' folder into your '/wp-content/plugins/' directory.
 3. Activate the plugin through the Wordpress Admin 'Plugins' page.
 4. Modify your theme, per the usage instructions below.
 
@@ -61,5 +61,10 @@ None yet... post your questions to the [plugin homepage](http://www.bigbigtech.c
 
 == Changelog ==
 
+= 0.2 =
+
+* Replaced underscores with dashes in plugin / directory name
+
 = 0.1 =
+
 * Initial version
