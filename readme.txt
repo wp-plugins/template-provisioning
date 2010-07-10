@@ -3,7 +3,7 @@ Contributors: jasontremblay
 Donate link: http://www.bigbigtech.com/
 Tags: template, theme, css, javascript
 Requires at least: 2.8.0
-Tested up to: 2.8.1
+Tested up to: 3.0
 Stable tag: 0.1
 
 The Template Provisioning plugin automatically links each blog page to .css and .js files that correspond to its template.
@@ -64,6 +64,8 @@ None yet... post your questions to the [plugin homepage](http://www.bigbigtech.c
 = 0.2 =
 
 * Replaced underscores with dashes in plugin / directory name
+* Removed "BigBig" prefix from the base class and base file
+* Hooking into "template_include" filter instead of separate template filters
 
 = 0.1 =
 
