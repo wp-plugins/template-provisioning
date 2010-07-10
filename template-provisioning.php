@@ -8,7 +8,7 @@ Author: Jason Tremblay
 Author URI: http://www.alertmybanjos.com
 */
 
-/*  Copyright 2009  Jason Tremblay  (email : jason@bigbigtech.com)
+/*  Copyright 2010  Jason Tremblay  (email : jason@bigbigtech.com)
 
 	This program is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -51,21 +51,8 @@ class Template_Provisioning
 	
 	function add_template_filters()
 	{
-		// DO THIS FOR EVERY TYPE OF TEMPLATE FILE
-		add_filter('404_template', array('Template_Provisioning','store_template_filename'), 11);
-		add_filter('archive_template', array('Template_Provisioning','store_template_filename'), 11);
-		add_filter('attachment_template', array('Template_Provisioning','store_template_filename'), 11);
-		add_filter('author_template', array('Template_Provisioning','store_template_filename'), 11);
-		add_filter('category_template', array('Template_Provisioning','store_template_filename'), 11);
-		add_filter('comments_popup_template', array('Template_Provisioning','store_template_filename'), 11);
-		add_filter('date_template', array('Template_Provisioning','store_template_filename'), 11);
-		add_filter('home_template', array('Template_Provisioning','store_template_filename'), 11);
-		add_filter('page_template', array('Template_Provisioning','store_template_filename'), 11);
-		add_filter('paged_template', array('Template_Provisioning','store_template_filename'), 11);
-		add_filter('search_template', array('Template_Provisioning','store_template_filename'), 11);
-		add_filter('single_template', array('Template_Provisioning','store_template_filename'), 11);
-		add_filter('tag_template', array('Template_Provisioning','store_template_filename'), 11);
-		add_filter('taxonomy_template', array('Template_Provisioning','store_template_filename'), 11);
+	  // THIS WON'T WORK FOR PAGES MODIFIED BY TEMPLATE_REDIRECT ACTION
+		add_filter('template_include', array('Template_Provisioning','store_template_filename'), 11);
 	}
 	
 	// WHEN WORDPRESS DECIDES WHICH TEMPLATE TO USE, AND FILTERS THE PATH,
