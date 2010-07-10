@@ -103,8 +103,9 @@ class BigBig_Template_Provisioning
 			'template_basename' => BigBig_Template_Provisioning::$template_basename,
 			'css_filename_template' => $css_filename_template,
 			'css_href_global' => $css_href_global,
+			'css_href_global_ie' => $css_href_global_ie,
 			'css_href_template' => $css_href_template,
-			'css_href_ie' => $css_href_ie,
+			'css_href_template_ie' => $css_href_template_ie,
 		);
 		BigBig_Template_Provisioning::display('template-css', $data);
 	}
