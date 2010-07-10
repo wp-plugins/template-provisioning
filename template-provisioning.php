@@ -44,7 +44,7 @@ class Template_Provisioning
 		
 		// ADD ACTIONS TO OUTPUT THE HEAD CONTENT
 		add_action('wp_head', array("Template_Provisioning","plugin_status"));
-		add_action('wp_head', array("Template_Provisioning","template_css"));
+		add_action('wp_print_styles', array("Template_Provisioning","enqueue_css"));
 		add_action('wp_head', array("Template_Provisioning","template_js"));
 		add_action('wp_footer', array("Template_Provisioning","template_footer_js"));
 	}
@@ -76,25 +76,18 @@ class Template_Provisioning
 		Template_Provisioning::display('plugin-status', $data);
 	}
 	
-	function template_css()
+	function enqueue_css()
 	{
-		// determine filenames and URLs
-		$css_filename_template = Template_Provisioning::$template_basename.'.css';
-		$css_href_global = (file_exists(TEMPLATEPATH."/css/global.css") ? get_bloginfo('template_directory')."/css/global.css" : '');
-		$css_href_global_ie = (file_exists(TEMPLATEPATH."/css/ie/global.css") ? get_bloginfo('template_directory')."/css/ie/global.css" : '');
-		$css_href_template = (file_exists(TEMPLATEPATH."/css/$css_filename_template") ? get_bloginfo('template_directory')."/css/$css_filename_template" : '');
-		$css_href_template_ie = (file_exists(TEMPLATEPATH."/css/ie/$css_filename_template") ? get_bloginfo('template_directory')."/css/ie/$css_filename_template" : '');
-		
-		// collect data for view and render the view
-		$data = array(
-			'template_basename' => Template_Provisioning::$template_basename,
-			'css_filename_template' => $css_filename_template,
-			'css_href_global' => $css_href_global,
-			'css_href_global_ie' => $css_href_global_ie,
-			'css_href_template' => $css_href_template,
-			'css_href_template_ie' => $css_href_template_ie,
-		);
-		Template_Provisioning::display('template-css', $data);
+	  $stylesheets = array(
+	    'global.css',
+	    'ie/global.css',
+	    Template_Provisioning::$template_basename.'.css',
+	    'ie/'.Template_Provisioning::$template_basename.'.css'
+	  );
+	  foreach($stylesheets as $stylesheet) {
+  	  if (file_exists(TEMPLATEPATH.'/css/'.$stylesheet))
+  	    wp_enqueue_style(preg_replace('/[^a-zA-Z0-9]/','-',$stylesheet), get_bloginfo('template_directory').'/css/'.$stylesheet);
+	  }
 	}
 	
 	function template_js()
