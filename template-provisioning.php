@@ -28,44 +28,44 @@ Author URI: http://www.alertmybanjos.com
 /* ----------------------------------------
 * DO IT WITH CLASS
 * ----------------------------------------*/
-class BigBig_Template_Provisioning
+class Template_Provisioning
 {
 	static $template_basename;
 	
 	function initialize()
 	{
 		// INITIALIZE WITH THE SAME DEFAULT AS WORDPRESS
-		BigBig_Template_Provisioning::$template_basename = 'index';
+		Template_Provisioning::$template_basename = 'index';
 		
 		// DELAY TILL PLUGINS LOADED TO BE REASONABLY SURE FILTER IS ADDED LAST,
 		// TAKING ADVANTAGE OF OTHER COOL TEMPLATE PLUGINS LIKE post-templates-by-cat.php
 		// (WANTING TO BE LAST ISN'T GREEDY, SINCE I DON'T CHANGE ANYTHING, RIGHT?)
-		add_action('plugins_loaded', array("BigBig_Template_Provisioning","add_template_filters"), 10);
+		add_action('plugins_loaded', array("Template_Provisioning","add_template_filters"), 10);
 		
 		// ADD ACTIONS TO OUTPUT THE HEAD CONTENT
-		add_action('wp_head', array("BigBig_Template_Provisioning","plugin_status"));
-		add_action('wp_head', array("BigBig_Template_Provisioning","template_css"));
-		add_action('wp_head', array("BigBig_Template_Provisioning","template_js"));
-		add_action('wp_footer', array("BigBig_Template_Provisioning","template_footer_js"));
+		add_action('wp_head', array("Template_Provisioning","plugin_status"));
+		add_action('wp_head', array("Template_Provisioning","template_css"));
+		add_action('wp_head', array("Template_Provisioning","template_js"));
+		add_action('wp_footer', array("Template_Provisioning","template_footer_js"));
 	}
 	
 	function add_template_filters()
 	{
 		// DO THIS FOR EVERY TYPE OF TEMPLATE FILE
-		add_filter('404_template', array('BigBig_Template_Provisioning','store_template_filename'), 11);
-		add_filter('archive_template', array('BigBig_Template_Provisioning','store_template_filename'), 11);
-		add_filter('attachment_template', array('BigBig_Template_Provisioning','store_template_filename'), 11);
-		add_filter('author_template', array('BigBig_Template_Provisioning','store_template_filename'), 11);
-		add_filter('category_template', array('BigBig_Template_Provisioning','store_template_filename'), 11);
-		add_filter('comments_popup_template', array('BigBig_Template_Provisioning','store_template_filename'), 11);
-		add_filter('date_template', array('BigBig_Template_Provisioning','store_template_filename'), 11);
-		add_filter('home_template', array('BigBig_Template_Provisioning','store_template_filename'), 11);
-		add_filter('page_template', array('BigBig_Template_Provisioning','store_template_filename'), 11);
-		add_filter('paged_template', array('BigBig_Template_Provisioning','store_template_filename'), 11);
-		add_filter('search_template', array('BigBig_Template_Provisioning','store_template_filename'), 11);
-		add_filter('single_template', array('BigBig_Template_Provisioning','store_template_filename'), 11);
-		add_filter('tag_template', array('BigBig_Template_Provisioning','store_template_filename'), 11);
-		add_filter('taxonomy_template', array('BigBig_Template_Provisioning','store_template_filename'), 11);
+		add_filter('404_template', array('Template_Provisioning','store_template_filename'), 11);
+		add_filter('archive_template', array('Template_Provisioning','store_template_filename'), 11);
+		add_filter('attachment_template', array('Template_Provisioning','store_template_filename'), 11);
+		add_filter('author_template', array('Template_Provisioning','store_template_filename'), 11);
+		add_filter('category_template', array('Template_Provisioning','store_template_filename'), 11);
+		add_filter('comments_popup_template', array('Template_Provisioning','store_template_filename'), 11);
+		add_filter('date_template', array('Template_Provisioning','store_template_filename'), 11);
+		add_filter('home_template', array('Template_Provisioning','store_template_filename'), 11);
+		add_filter('page_template', array('Template_Provisioning','store_template_filename'), 11);
+		add_filter('paged_template', array('Template_Provisioning','store_template_filename'), 11);
+		add_filter('search_template', array('Template_Provisioning','store_template_filename'), 11);
+		add_filter('single_template', array('Template_Provisioning','store_template_filename'), 11);
+		add_filter('tag_template', array('Template_Provisioning','store_template_filename'), 11);
+		add_filter('taxonomy_template', array('Template_Provisioning','store_template_filename'), 11);
 	}
 	
 	// WHEN WORDPRESS DECIDES WHICH TEMPLATE TO USE, AND FILTERS THE PATH,
@@ -73,7 +73,7 @@ class BigBig_Template_Provisioning
 	function store_template_filename($template_filepath = '')
 	{
 		if ('' != $template_filepath) {
-			BigBig_Template_Provisioning::$template_basename = basename($template_filepath, '.php');
+			Template_Provisioning::$template_basename = basename($template_filepath, '.php');
 		}
 		return $template_filepath;
 	}
@@ -82,17 +82,17 @@ class BigBig_Template_Provisioning
 	{
 		// collect data for view and render the view
 		$data = array(
-			'template_basename' => BigBig_Template_Provisioning::$template_basename,
+			'template_basename' => Template_Provisioning::$template_basename,
 			'TEMPLATEPATH' => TEMPLATEPATH,
 			'STYLESHEETPATH' => STYLESHEETPATH
 		);
-		BigBig_Template_Provisioning::display('plugin-status', $data);
+		Template_Provisioning::display('plugin-status', $data);
 	}
 	
 	function template_css()
 	{
 		// determine filenames and URLs
-		$css_filename_template = BigBig_Template_Provisioning::$template_basename.'.css';
+		$css_filename_template = Template_Provisioning::$template_basename.'.css';
 		$css_href_global = (file_exists(TEMPLATEPATH."/css/global.css") ? get_bloginfo('template_directory')."/css/global.css" : '');
 		$css_href_global_ie = (file_exists(TEMPLATEPATH."/css/ie/global.css") ? get_bloginfo('template_directory')."/css/ie/global.css" : '');
 		$css_href_template = (file_exists(TEMPLATEPATH."/css/$css_filename_template") ? get_bloginfo('template_directory')."/css/$css_filename_template" : '');
@@ -100,48 +100,48 @@ class BigBig_Template_Provisioning
 		
 		// collect data for view and render the view
 		$data = array(
-			'template_basename' => BigBig_Template_Provisioning::$template_basename,
+			'template_basename' => Template_Provisioning::$template_basename,
 			'css_filename_template' => $css_filename_template,
 			'css_href_global' => $css_href_global,
 			'css_href_global_ie' => $css_href_global_ie,
 			'css_href_template' => $css_href_template,
 			'css_href_template_ie' => $css_href_template_ie,
 		);
-		BigBig_Template_Provisioning::display('template-css', $data);
+		Template_Provisioning::display('template-css', $data);
 	}
 	
 	function template_js()
 	{
 		// determine filenames and URLs
-		$js_filename_template = BigBig_Template_Provisioning::$template_basename.'.js';
+		$js_filename_template = Template_Provisioning::$template_basename.'.js';
 		$js_src_global = (file_exists(TEMPLATEPATH."/js/global.js") ? get_bloginfo('template_directory')."/js/global.js" : '');
 		$js_src_template = (file_exists(TEMPLATEPATH."/js/$js_filename_template") ? get_bloginfo('template_directory')."/js/$js_filename_template" : '');
 		
 		// collect data for view and render the view
 		$data = array(
-			'template_basename' => BigBig_Template_Provisioning::$template_basename,
+			'template_basename' => Template_Provisioning::$template_basename,
 			'js_filename_template' => $js_filename_template,
 			'js_src_global' => $js_src_global,
 			'js_src_template' => $js_src_template,
 		);
-		BigBig_Template_Provisioning::display('template-js', $data);
+		Template_Provisioning::display('template-js', $data);
 	}
 	
 	function template_footer_js()
 	{
 		// determine filenames and URLs
-		$js_filename_template = BigBig_Template_Provisioning::$template_basename.'_footer.js';
+		$js_filename_template = Template_Provisioning::$template_basename.'_footer.js';
 		$js_src_global = (file_exists(TEMPLATEPATH."/js/global_footer.js") ? get_bloginfo('template_directory')."/js/global_footer.js" : '');
 		$js_src_template = (file_exists(TEMPLATEPATH."/js/$js_filename_template") ? get_bloginfo('template_directory')."/js/$js_filename_template" : '');
 		
 		// collect data for view and render the view
 		$data = array(
-			'template_basename' => BigBig_Template_Provisioning::$template_basename,
+			'template_basename' => Template_Provisioning::$template_basename,
 			'js_filename_template' => $js_filename_template,
 			'js_src_global' => $js_src_global,
 			'js_src_template' => $js_src_template,
 		);
-		BigBig_Template_Provisioning::display('template-js', $data);
+		Template_Provisioning::display('template-js', $data);
 	}
 	
 	// RENDER A VIEW
@@ -162,6 +162,6 @@ class BigBig_Template_Provisioning
 /* --------------------------------------------------
 * INITIALIZE PLUGIN
 * --------------------------------------------------*/
-BigBig_Template_Provisioning::initialize();
+Template_Provisioning::initialize();
 
 ?>
