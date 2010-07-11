@@ -4,7 +4,7 @@ Donate link: http://www.bigbigtech.com/
 Tags: template, theme, css, javascript
 Requires at least: 2.8.0
 Tested up to: 3.0
-Stable tag: 0.1
+Stable tag: 0.2
 
 The Template Provisioning plugin automatically links each blog page to .css and .js files that correspond to its template.
 
@@ -52,8 +52,8 @@ included in page &lt;head&gt; by wp\_head() function
 End-of-page Javascript files for "&lt;template\_name&gt;.php" footer:
 included near the &lt;/body&gt; tag by wp\_footer() function
 
-* js/global\_footer.js
-* js/&lt;template\_name&gt;\_footer.js
+* js/global.footer.js
+* js/&lt;template\_name&gt;.footer.js
 
 == Frequently Asked Questions ==
 
@@ -63,9 +63,11 @@ None yet... post your questions to the [plugin homepage](http://www.bigbigtech.c
 
 = 0.2 =
 
+* Plugin now uses WordPress native enqueuing functions
+* Plugin now looks for global.footer.js and &lt;template\_name&gt;.footer.js
+* Plugin now hooks into "template_include" filter instead of separate template filters
 * Replaced underscores with dashes in plugin / directory name
 * Removed "BigBig" prefix from the base class and base file
-* Hooking into "template_include" filter instead of separate template filters
 
 = 0.1 =
 
