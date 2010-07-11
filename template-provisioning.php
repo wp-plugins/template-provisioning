@@ -43,15 +43,14 @@ class Template_Provisioning
 		add_action('plugins_loaded', array("Template_Provisioning","add_template_filters"), 10);
 		
 		// ADD ACTIONS TO OUTPUT THE HEAD CONTENT
-		add_action('wp_head', array("Template_Provisioning","plugin_status"));
+		add_action('wp_head', array("Template_Provisioning","helpful_comment"));
 		add_action('wp_print_styles', array("Template_Provisioning","enqueue_css"));
-		add_action('wp_head', array("Template_Provisioning","template_js"));
-		add_action('wp_footer', array("Template_Provisioning","template_footer_js"));
+		add_action('wp_print_scripts', array("Template_Provisioning","enqueue_js"));
 	}
 	
 	function add_template_filters()
 	{
-	  // THIS WON'T WORK FOR PAGES MODIFIED BY TEMPLATE_REDIRECT ACTION
+		// THIS WON'T WORK FOR PAGES MODIFIED BY TEMPLATE_REDIRECT ACTION
 		add_filter('template_include', array('Template_Provisioning','store_template_filename'), 11);
 	}
 	
@@ -65,63 +64,56 @@ class Template_Provisioning
 		return $template_filepath;
 	}
 	
-	function plugin_status()
+	function helpful_comment()
 	{
-		// collect data for view and render the view
-		$data = array(
-			'template_basename' => Template_Provisioning::$template_basename,
-			'TEMPLATEPATH' => TEMPLATEPATH,
-			'STYLESHEETPATH' => STYLESHEETPATH
-		);
-		Template_Provisioning::display('plugin-status', $data);
+		$template_basename = Template_Provisioning::$template_basename;
+		echo "\n\n";
+    echo sprintf("<!-- TEMPLATE PROVISIONING CSS: 'global.css', 'ie/global.css', '%s.css', 'ie/%s.css' -->", $template_basename, $template_basename);
+		echo "\n";
+    echo sprintf("<!-- TEMPLATE PROVISIONING JS: 'global.js', '%s.js', 'global.footer.js', '%s.footer.js' -->", $template_basename, $template_basename);
+		echo "\n\n";
 	}
 	
 	function enqueue_css()
 	{
-	  $stylesheets = array(
-	    'global.css',
-	    'ie/global.css',
-	    Template_Provisioning::$template_basename.'.css',
-	    'ie/'.Template_Provisioning::$template_basename.'.css'
-	  );
-	  foreach($stylesheets as $stylesheet) {
-  	  if (file_exists(TEMPLATEPATH.'/css/'.$stylesheet))
-  	    wp_enqueue_style(preg_replace('/[^a-zA-Z0-9]/','-',$stylesheet), get_bloginfo('template_directory').'/css/'.$stylesheet);
-	  }
+		$stylesheets = array(
+			'global.css',
+			'ie/global.css',
+			Template_Provisioning::$template_basename.'.css',
+			'ie/'.Template_Provisioning::$template_basename.'.css'
+		);
+		foreach($stylesheets as $stylesheet) {
+			if (file_exists(TEMPLATEPATH.'/css/'.$stylesheet)) {
+				wp_enqueue_style(
+					$handle = $stylesheet, 
+					$src = get_bloginfo('template_directory').'/css/'.$stylesheet,
+					$dependencies = array(),
+					$version = false,
+					$media = false
+				);
+			}
+		}
 	}
 	
-	function template_js()
+	function enqueue_js()
 	{
-		// determine filenames and URLs
-		$js_filename_template = Template_Provisioning::$template_basename.'.js';
-		$js_src_global = (file_exists(TEMPLATEPATH."/js/global.js") ? get_bloginfo('template_directory')."/js/global.js" : '');
-		$js_src_template = (file_exists(TEMPLATEPATH."/js/$js_filename_template") ? get_bloginfo('template_directory')."/js/$js_filename_template" : '');
-		
-		// collect data for view and render the view
-		$data = array(
-			'template_basename' => Template_Provisioning::$template_basename,
-			'js_filename_template' => $js_filename_template,
-			'js_src_global' => $js_src_global,
-			'js_src_template' => $js_src_template,
+		$scripts = array(
+			'global.js',
+			'global.footer.js',
+			Template_Provisioning::$template_basename.'.js',
+			Template_Provisioning::$template_basename.'.footer.js'
 		);
-		Template_Provisioning::display('template-js', $data);
-	}
-	
-	function template_footer_js()
-	{
-		// determine filenames and URLs
-		$js_filename_template = Template_Provisioning::$template_basename.'_footer.js';
-		$js_src_global = (file_exists(TEMPLATEPATH."/js/global_footer.js") ? get_bloginfo('template_directory')."/js/global_footer.js" : '');
-		$js_src_template = (file_exists(TEMPLATEPATH."/js/$js_filename_template") ? get_bloginfo('template_directory')."/js/$js_filename_template" : '');
-		
-		// collect data for view and render the view
-		$data = array(
-			'template_basename' => Template_Provisioning::$template_basename,
-			'js_filename_template' => $js_filename_template,
-			'js_src_global' => $js_src_global,
-			'js_src_template' => $js_src_template,
-		);
-		Template_Provisioning::display('template-js', $data);
+		foreach($scripts as $script) {
+			if (file_exists(TEMPLATEPATH.'/js/'.$script)) {
+				wp_enqueue_script(
+					$handle = $script,
+					$src = get_bloginfo('template_directory').'/js/'.$script,
+					$dependencies = array(),
+					$version = false,
+					$in_footer = (int) preg_match('/\.footer\.js$/', $script)
+				);
+			}
+		}
 	}
 	
 	// RENDER A VIEW
