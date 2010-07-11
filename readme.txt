@@ -2,7 +2,7 @@
 Contributors: jasontremblay
 Donate link: http://www.bigbigtech.com/
 Tags: template, theme, css, javascript
-Requires at least: 2.8.0
+Requires at least: 3.0
 Tested up to: 3.0
 Stable tag: 0.2
 
@@ -11,6 +11,8 @@ The Template Provisioning plugin automatically links each blog page to .css and 
 == Description ==
 
 = Overview =
+
+*** WARNING: VERSION 0.2 OF THIS PLUGIN REQUIRES WORDPRESS 3.0 ***
 
 The Template Provisioning plugin automatically links to stylesheet and javascript files in your theme directories based on the template file that renders a page. It searches in several pre-defined locations for files, and includes whichever files are found.
 
