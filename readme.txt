@@ -2,9 +2,9 @@
 Contributors: jasontremblay
 Donate link: http://www.bigbigtech.com/
 Tags: template, theme, css, javascript
-Requires at least: 2.8.0
+Requires at least: 3.0
 Tested up to: 3.0
-Stable tag: 0.2
+Stable tag: 0.2.1
 
 The Template Provisioning plugin automatically links each blog page to .css and .js files that correspond to its template.
 
@@ -60,6 +60,11 @@ included near the &lt;/body&gt; tag by wp\_footer() function
 None yet... post your questions to the [plugin homepage](http://www.bigbigtech.com/wordpress-plugins/template-provisioning "Template Provisioning Homepage")
 
 == Changelog ==
+
+= 0.2.1 =
+
+* Use global $is_IE variable to conditionally include IE stylesheets
+* If WordPress version &lt; 3.0, fall back to old plugin hooks
 
 = 0.2 =
 
