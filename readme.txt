@@ -2,9 +2,9 @@
 Contributors: jasontremblay
 Donate link: http://www.bigbigtech.com/
 Tags: template, theme, css, javascript
-Requires at least: 3.0
+Requires at least: 2.8
 Tested up to: 3.0
-Stable tag: 0.2.1
+Stable tag: 0.2.2
 
 The Template Provisioning plugin automatically links each blog page to .css and .js files that correspond to its template.
 
@@ -60,6 +60,11 @@ included near the &lt;/body&gt; tag by wp\_footer() function
 None yet... post your questions to the [plugin homepage](http://www.bigbigtech.com/wordpress-plugins/template-provisioning "Template Provisioning Homepage")
 
 == Changelog ==
+
+= 0.2.2 =
+
+* Changed "Required at least" back to 2.8
+* Don't enqueue resources on admin pages
 
 = 0.2.1 =
 
