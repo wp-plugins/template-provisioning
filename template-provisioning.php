@@ -114,12 +114,13 @@ class Template_Provisioning
 		if ($is_IE) $stylesheets[] = 'ie/'.Template_Provisioning::$template_basename.'.css';
 		
 		foreach($stylesheets as $stylesheet) {
-			if (file_exists(TEMPLATEPATH.'/css/'.$stylesheet)) {
+		  $file_path = TEMPLATEPATH.'/css/'.$stylesheet;
+			if (file_exists($file_path)) {
 				wp_enqueue_style(
 					$handle = $stylesheet, 
 					$src = get_bloginfo('template_directory').'/css/'.$stylesheet,
 					$dependencies = array(),
-					$version = false,
+					$version = filemtime($file_path),
 					$media = false
 				);
 			}
@@ -135,12 +136,13 @@ class Template_Provisioning
 			Template_Provisioning::$template_basename.'.footer.js'
 		);
 		foreach($scripts as $script) {
-			if (file_exists(TEMPLATEPATH.'/js/'.$script)) {
+		  $file_path = TEMPLATEPATH.'/js/'.$script;
+			if (file_exists($file_path)) {
 				wp_enqueue_script(
 					$handle = $script,
 					$src = get_bloginfo('template_directory').'/js/'.$script,
 					$dependencies = array(),
-					$version = false,
+					$version = filemtime($file_path),
 					$in_footer = (int) preg_match('/\.footer\.js$/', $script)
 				);
 			}
