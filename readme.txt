@@ -55,6 +55,13 @@ included near the &lt;/body&gt; tag by wp\_footer() function
 * js/global.footer.js
 * js/&lt;template\_name&gt;.footer.js
 
+If your script or stylesheet depends on others (i.e. jQuery) being loaded first, simply enqueue them in your template header before the call to wp_head().
+
+You can also specify dependencies in comments in included scripts and stylesheets using the following syntax (dependencies should be comma-separated):
+* // NEEDS: jquery, jquery-cycle
+
+NOTE: the above syntax will not actually enqueue the dependencies... it will only require them for our included scripts.
+
 == Frequently Asked Questions ==
 
 None yet... post your questions to the [plugin homepage](http://www.bigbigtech.com/wordpress-plugins/template-provisioning "Template Provisioning Homepage")
@@ -63,6 +70,8 @@ None yet... post your questions to the [plugin homepage](http://www.bigbigtech.c
 
 = 0.2.2 =
 
+* Scripts/stylesheets can now specify their own dependencies
+* Removed file extension from enqueue handles
 * Changed "Required at least" back to 2.8
 * Don't enqueue resources on admin pages
 

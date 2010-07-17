@@ -108,18 +108,25 @@ class Template_Provisioning
 		global $is_IE;
 		
 		$stylesheets = array();
-		$stylesheets[] = 'global.css';
-		if ($is_IE) $stylesheets[] = 'ie/global.css';
-		$stylesheets[] = Template_Provisioning::$template_basename.'.css';
-		if ($is_IE) $stylesheets[] = 'ie/'.Template_Provisioning::$template_basename.'.css';
+		$stylesheets[] = 'global';
+		if ($is_IE) $stylesheets[] = 'ie/global';
+		$stylesheets[] = Template_Provisioning::$template_basename;
+		if ($is_IE) $stylesheets[] = 'ie/'.Template_Provisioning::$template_basename;
 		
 		foreach($stylesheets as $stylesheet) {
-		  $file_path = TEMPLATEPATH.'/css/'.$stylesheet;
+		  $file_path = TEMPLATEPATH.'/css/'.$stylesheet.'.css';
 			if (file_exists($file_path)) {
+				
+				// get dependencies
+				$dependencies = Template_Provisioning::get_dependencies($file_path);
+				
+				// prevent loading of admin styles
+				wp_deregister_style($stylesheet);
+				
 				wp_enqueue_style(
 					$handle = $stylesheet, 
-					$src = get_bloginfo('template_directory').'/css/'.$stylesheet,
-					$dependencies = array(),
+					$src = get_bloginfo('template_directory').'/css/'.$stylesheet.'.css',
+					$dependencies = $dependencies,
 					$version = filemtime($file_path),
 					$media = false
 				);
@@ -130,25 +137,51 @@ class Template_Provisioning
 	function enqueue_js()
 	{
 		$scripts = array(
-			'global.js',
-			'global.footer.js',
-			Template_Provisioning::$template_basename.'.js',
-			Template_Provisioning::$template_basename.'.footer.js'
+			'global',
+			'global.footer',
+			Template_Provisioning::$template_basename,
+			Template_Provisioning::$template_basename.'.footer'
 		);
 		foreach($scripts as $script) {
-		  $file_path = TEMPLATEPATH.'/js/'.$script;
+			$file_path = TEMPLATEPATH.'/js/'.$script.'.js';
 			if (file_exists($file_path)) {
+				
+				// get dependencies
+				$dependencies = Template_Provisioning::get_dependencies($file_path);
+				
+				// prevent loading of admin styles
+				wp_deregister_script($script);
+				
 				wp_enqueue_script(
 					$handle = $script,
-					$src = get_bloginfo('template_directory').'/js/'.$script,
-					$dependencies = array(),
+					$src = get_bloginfo('template_directory').'/js/'.$script.'.js',
+					$dependencies = $dependencies,
 					$version = filemtime($file_path),
-					$in_footer = (int) preg_match('/\.footer\.js$/', $script)
+					$in_footer = (int) preg_match('/\.footer$/', $script)
 				);
 			}
 		}
 	}
-
+	
+	function get_dependencies($file_path)
+	{
+		$dependencies = array();
+		$file_contents = file($file_path);
+		$dep_lines = array_filter($file_contents, array("Template_Provisioning","is_dependency"));
+		foreach ($dep_lines as &$dep_line) {
+			$dep_line = trim(preg_replace('/^\/\/ ?NEEDS:/', '', $dep_line));
+			$dependencies = array_merge($dependencies, explode(',', $dep_line));
+		}
+		array_walk($dependencies, 'trim');
+		return $dependencies;
+	}
+	
+	function is_dependency($line)
+	{
+		// return true if line begins with // NEEDS:
+		return preg_match('/^\/\/ ?NEEDS:/', $line);
+	}
+	
 }
 
 /* --------------------------------------------------
