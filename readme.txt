@@ -4,7 +4,7 @@ Donate link: http://www.bigbigtech.com/
 Tags: template, theme, css, javascript
 Requires at least: 2.8
 Tested up to: 3.0
-Stable tag: 0.2.2
+Stable tag: 0.2.3
 
 The Template Provisioning plugin automatically links each blog page to .css and .js files that correspond to its template.
 
@@ -68,9 +68,12 @@ None yet... post your questions to the [plugin homepage](http://www.bigbigtech.c
 
 == Changelog ==
 
-= 0.2.2 =
+= 0.2.3 =
 
 * Scripts/stylesheets can now specify their own dependencies
+
+= 0.2.2 =
+
 * Removed file extension from enqueue handles
 * Changed "Required at least" back to 2.8
 * Don't enqueue resources on admin pages
