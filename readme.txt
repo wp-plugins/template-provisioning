@@ -4,7 +4,7 @@ Donate link: http://www.bigbigtech.com/
 Tags: template, theme, css, javascript
 Requires at least: 2.8
 Tested up to: 3.0
-Stable tag: 0.2.3
+Stable tag: 0.2.4
 
 The Template Provisioning plugin automatically links each blog page to .css and .js files that correspond to its template.
 
@@ -64,7 +64,7 @@ NOTE: the above syntax will not actually enqueue the dependencies... it will onl
 
 = less.js support =
 
-As of version 0.2.3, the plugin will also look for .less files
+As of version 0.2.4, the plugin will also look for .less files
 
 * css/global.less
 * css/ie/global.less
@@ -81,9 +81,12 @@ None yet... post your questions to the [plugin homepage](http://www.bigbigtech.c
 
 == Changelog ==
 
-= 0.2.3 =
+= 0.2.4 =
 
 * Added support for less.js
+
+= 0.2.3 =
+
 * Scripts/stylesheets can now specify their own dependencies
 
 = 0.2.2 =
