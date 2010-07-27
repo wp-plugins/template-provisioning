@@ -64,7 +64,7 @@ NOTE: the above syntax will not actually enqueue the dependencies... it will onl
 
 = less.js support =
 
-As of version 0.2.3, the plugin will also look for .less files
+As of version 0.2.4, the plugin will also look for .less files
 
 * css/global.less
 * css/ie/global.less
@@ -81,9 +81,12 @@ None yet... post your questions to the [plugin homepage](http://www.bigbigtech.c
 
 == Changelog ==
 
-= 0.2.3 =
+= 0.2.4 =
 
 * Added support for less.js
+
+= 0.2.3 =
+
 * Scripts/stylesheets can now specify their own dependencies
 
 = 0.2.2 =
