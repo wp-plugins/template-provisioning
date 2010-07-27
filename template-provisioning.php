@@ -46,9 +46,6 @@ class Template_Provisioning
 		// (WANTING TO BE LAST ISN'T GREEDY, SINCE I DON'T CHANGE ANYTHING, RIGHT?)
 		add_action('plugins_loaded', array("Template_Provisioning","add_template_filters"), 10);
 		
-		// ADD FILTER FOR STYLE TAG
-		add_filter('style_loader_tag', array("Template_Provisioning","filter_style_link_tags_for_less_js"), 10, 2);
-		
 		// ADD ACTIONS TO OUTPUT THE HEAD CONTENT
 		add_action('wp_head', array("Template_Provisioning","helpful_comment"));
 		add_action('wp_print_styles', array("Template_Provisioning","enqueue_css"));
@@ -96,18 +93,6 @@ class Template_Provisioning
 		return $template_filepath;
 	}
 	
-	function filter_style_link_tags_for_less_js($tag, $handle)
-	{
-  	global $wp_styles;
-  	
-  	// if the src ends in ".less", the rel attribute should be "stylesheet/less"
-  	if (preg_match("/\.less$/", $wp_styles->registered[$handle]->src)) {
-  	  $tag = preg_replace("/rel=(['\"])[^'\"]*(['\"])/", "rel=$1stylesheet/less$2", $tag);
-  	}
-  	
-	  return $tag;
-	}
-	
 	function helpful_comment()
 	{
 		$template_basename = Template_Provisioning::$template_basename;
@@ -122,8 +107,6 @@ class Template_Provisioning
 	{
 		global $is_IE;
 		
-		$extensions = array('css','less');
-		
 		$stylesheets = array();
 		$stylesheets[] = 'global';
 		if ($is_IE) $stylesheets[] = 'ie/global';
@@ -131,41 +114,34 @@ class Template_Provisioning
 		if ($is_IE) $stylesheets[] = 'ie/'.Template_Provisioning::$template_basename;
 		
 		foreach($stylesheets as $stylesheet) {
-		  foreach($extensions as $extension) {
-  		  $file_path = TEMPLATEPATH.'/css/'.$stylesheet.'.'.$extension;
-  			if (file_exists($file_path)) {
-          
-          // if .less file, be sure to enqueue less.js
-          if ($extension == 'less') Template_Provisioning::enqueue_js('less');
-          
-  				// get dependencies
-  				$dependencies = Template_Provisioning::get_dependencies($file_path);
-
-  				// prevent loading of admin styles
-  				wp_deregister_style($stylesheet.'.'.$extension);
-
-  				wp_enqueue_style(
-  					$handle = $stylesheet.'.'.$extension, 
-  					$src = get_bloginfo('template_directory').'/css/'.$stylesheet.'.'.$extension,
-  					$dependencies = $dependencies,
-  					$version = filemtime($file_path),
-  					$media = false
-  				);
-  			}
-		  }
+		  $file_path = TEMPLATEPATH.'/css/'.$stylesheet.'.css';
+			if (file_exists($file_path)) {
+				
+				// get dependencies
+				$dependencies = Template_Provisioning::get_dependencies($file_path);
+				
+				// prevent loading of admin styles
+				wp_deregister_style($stylesheet);
+				
+				wp_enqueue_style(
+					$handle = $stylesheet, 
+					$src = get_bloginfo('template_directory').'/css/'.$stylesheet.'.css',
+					$dependencies = $dependencies,
+					$version = filemtime($file_path),
+					$media = false
+				);
+			}
 		}
 	}
 	
-	function enqueue_js($scripts = '')
+	function enqueue_js()
 	{
-	  if (!$scripts = explode(',', $scripts)) {
-  		$scripts = array(
-  			'global',
-  			'global.footer',
-  			Template_Provisioning::$template_basename,
-  			Template_Provisioning::$template_basename.'.footer'
-  		);
-	  }
+		$scripts = array(
+			'global',
+			'global.footer',
+			Template_Provisioning::$template_basename,
+			Template_Provisioning::$template_basename.'.footer'
+		);
 		foreach($scripts as $script) {
 			$file_path = TEMPLATEPATH.'/js/'.$script.'.js';
 			if (file_exists($file_path)) {
@@ -185,11 +161,6 @@ class Template_Provisioning
 				);
 			}
 		}
-	}
-	
-	function enqueue_less_js()
-	{
-	  
 	}
 	
 	function get_dependencies($file_path)
