@@ -3,7 +3,7 @@
 Plugin Name: Template Provisioning
 Plugin URI: http://www.bigbigtech.com/wordpress-plugins/template-provisioning/
 Description: Automatically links to css and js files for the current template file.
-Version: 0.2.4.1
+Version: 0.2.4.2
 Author: Jason Tremblay
 Author URI: http://www.alertmybanjos.com
 */
@@ -160,7 +160,7 @@ class Template_Provisioning
 	{
 	  // if string passed in, explode to array
 	  if (is_string($scripts) && $scripts) {
-	    $scripts = explode($scripts);
+	    $scripts = explode(',', $scripts);
 	  
 	  // else if not an array, just use defaults
 	  } else if (!is_array($scripts)) {

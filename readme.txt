@@ -4,7 +4,7 @@ Donate link: http://www.bigbigtech.com/
 Tags: template, theme, css, javascript
 Requires at least: 2.8
 Tested up to: 3.0
-Stable tag: 0.2.4.1
+Stable tag: 0.2.4.2
 
 The Template Provisioning plugin automatically links each blog page to .css and .js files that correspond to its template.
 
@@ -80,6 +80,10 @@ If you have the "less.js" javascript file in the expected location, it will also
 None yet... post your questions to the [plugin homepage](http://www.bigbigtech.com/wordpress-plugins/template-provisioning "Template Provisioning Homepage")
 
 == Changelog ==
+
+= 0.2.4.2 =
+
+* Fixed bug in javascript enqueueing (caused by my last bugfix... I suck :-P)
 
 = 0.2.4.1 =
 
