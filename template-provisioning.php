@@ -31,8 +31,9 @@ Author URI: http://www.alertmybanjos.com
 class Template_Provisioning
 {
 	static $template_basename;
+	static $asset_host;
 	
-	function initialize()
+	static function initialize()
 	{
 	  // WE ONLY WANT THIS ON THE FRONT-END, NOT ADMIN
 	  // (although it would be cool to handle admin pages also)
@@ -40,6 +41,9 @@ class Template_Provisioning
 	  
 		// INITIALIZE WITH THE SAME DEFAULT AS WORDPRESS
 		Template_Provisioning::$template_basename = 'index';
+		
+		// INITIALIZE ASSET HOST
+		Template_Provisioning::$asset_host = get_bloginfo('template_directory');
 		
 		// DELAY TILL PLUGINS LOADED TO BE REASONABLY SURE FILTER IS ADDED LAST,
 		// TAKING ADVANTAGE OF OTHER COOL TEMPLATE PLUGINS LIKE post-templates-by-cat.php
@@ -55,7 +59,12 @@ class Template_Provisioning
 		add_action('wp_print_scripts', array("Template_Provisioning","enqueue_js"));
 	}
 	
-	function add_template_filters()
+	static function set_asset_host($host)
+	{
+		Template_Provisioning::$asset_host = $host;
+	}
+	
+	static function add_template_filters()
 	{
 		
 		// if this is an elder WordPress (for backward compatibility)
@@ -88,7 +97,7 @@ class Template_Provisioning
 	
 	// WHEN WORDPRESS DECIDES WHICH TEMPLATE TO USE, AND FILTERS THE PATH,
 	// STORE THAT PATH IN AN INSTANCE VARIABLE FOR LATER USE
-	function store_template_filename($template_filepath = '')
+	static function store_template_filename($template_filepath = '')
 	{
 		if ('' != $template_filepath) {
 			Template_Provisioning::$template_basename = basename($template_filepath, '.php');
@@ -96,7 +105,7 @@ class Template_Provisioning
 		return $template_filepath;
 	}
 	
-	function filter_style_link_tags_for_less_js($tag, $handle)
+	static function filter_style_link_tags_for_less_js($tag, $handle)
 	{
   	global $wp_styles;
   	
@@ -108,7 +117,7 @@ class Template_Provisioning
 	  return $tag;
 	}
 	
-	function helpful_comment()
+	static function helpful_comment()
 	{
 		$template_basename = Template_Provisioning::$template_basename;
 		echo "\n\n";
@@ -118,21 +127,25 @@ class Template_Provisioning
 		echo "\n\n";
 	}
 	
-	function enqueue_css()
+	static function enqueue_css()
 	{
-		global $is_IE;
+		global $wp_styles;
 		
 		$extensions = array('css','less');
 		
 		$stylesheets = array();
 		$stylesheets[] = 'global';
-		if ($is_IE) $stylesheets[] = 'ie/global';
+		$stylesheets[] = 'ie/global';
 		$stylesheets[] = Template_Provisioning::$template_basename;
-		if ($is_IE) $stylesheets[] = 'ie/'.Template_Provisioning::$template_basename;
+		$stylesheets[] = 'ie/'.Template_Provisioning::$template_basename;
 		
 		foreach($stylesheets as $stylesheet) {
 		  foreach($extensions as $extension) {
-  		  $file_path = TEMPLATEPATH.'/css/'.$stylesheet.'.'.$extension;
+        
+        // asset file name
+        $file_name = $stylesheet.'.'.$extension;
+  		  $file_path = TEMPLATEPATH.'/css/'.$file_name;
+  		  
   			if (file_exists($file_path)) {
           
           // if .less file, be sure to enqueue less.js
@@ -142,21 +155,26 @@ class Template_Provisioning
   				$dependencies = Template_Provisioning::get_dependencies($file_path);
 
   				// prevent loading of admin styles
-  				wp_deregister_style($stylesheet.'.'.$extension);
-
+  				wp_deregister_style($file_name);
+          
   				wp_enqueue_style(
-  					$handle = $stylesheet.'.'.$extension, 
-  					$src = get_bloginfo('template_directory').'/css/'.$stylesheet.'.'.$extension,
+  					$handle = $file_name, 
+  					$src = Template_Provisioning::$asset_host.'/css/'.$file_name,
   					$dependencies = $dependencies,
   					$version = filemtime($file_path),
   					$media = false
   				);
+  				
+          // ie conditional
+          if (preg_match('/^ie\//', $stylesheet)) {
+            $wp_styles->add_data($file_name, 'conditional', 'ie');
+          }
   			}
 		  }
 		}
 	}
 	
-	function enqueue_js($scripts = '')
+	static function enqueue_js($scripts = '')
 	{
 	  // if string passed in, explode to array
 	  if (is_string($scripts) && $scripts) {
@@ -185,7 +203,7 @@ class Template_Provisioning
 				
 				wp_enqueue_script(
 					$handle = $script,
-					$src = get_bloginfo('template_directory').'/js/'.$script.'.js',
+					$src = Template_Provisioning::$asset_host.'/js/'.$script.'.js',
 					$dependencies = $dependencies,
 					$version = filemtime($file_path),
 					$in_footer = (int) preg_match('/\.footer$/', $script)
@@ -194,7 +212,7 @@ class Template_Provisioning
 		}
 	}
 	
-	function get_dependencies($file_path)
+	static function get_dependencies($file_path)
 	{
 		$dependencies = array();
 		$file_contents = file($file_path);
@@ -207,7 +225,7 @@ class Template_Provisioning
 		return $dependencies;
 	}
 	
-	function is_dependency($line)
+	static function is_dependency($line)
 	{
 		// return true if line begins with // NEEDS:
 		return preg_match('/^\/\/ ?NEEDS:/', $line);
